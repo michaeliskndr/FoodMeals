@@ -10,7 +10,10 @@ import CommonKit
 
 public class MealsKitFactory: MealFactory {
     public func makeMealViewController() -> UIViewController {
-        return MealsViewController()
+        let viewModel = MealsViewModel()
+        let viewController = MealsViewController()
+        viewController.viewModel = viewModel
+        return viewController
     }
     
     public func makeMealDetailViewController() -> UIViewController {

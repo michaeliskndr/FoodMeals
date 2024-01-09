@@ -38,6 +38,7 @@ targetTemplates:
       - package: MealsKit
     settings:
       base:
+        ENABLE_TESTING_SEARCH_PATHS: YES
         CURRENT_PROJECT_VERSION: 1
         BUNDLE_VERSION: 1
         MARKETING_VERSION: 1.0
