@@ -16,9 +16,13 @@ public class MealsKitFactory: MealFactory {
         return viewController
     }
     
-    public func makeMealDetailViewController() -> UIViewController {
-        // TODO: Add Meal Detail
-        return UIViewController()
+    public func makeMealDetailViewController(id: String) -> UIViewController {
+        let viewModel = MealsDetailViewModel()
+        let viewController = MealsDetailViewController()
+        
+        viewController.viewModel = viewModel
+        viewController.id = id
+        return viewController
     }
     
     public func makeMealViewerController() -> UIViewController {

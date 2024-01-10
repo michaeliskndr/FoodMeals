@@ -13,6 +13,12 @@ import SnapKit
 import DiffableDataSources
 import RxSwift
 
+protocol MealsViewModelRespondObservable {
+    func search(query: String)
+    func goToMeal(from viewController: UIViewController, id: String)
+    var searchObservable: Observable<MealListState> { get }
+}
+
 class MealsViewController: UIViewController {
     
     var viewModel: MealsViewModelRespondObservable?
@@ -25,6 +31,13 @@ class MealsViewController: UIViewController {
         case empty
         case item(item: Meal)
         case mock
+        
+        var item: Meal? {
+            switch self {
+            case .item(let item): return item
+            default: return nil
+            }
+        }
     }
     
     lazy var tableView: UITableView = {
@@ -82,7 +95,7 @@ class MealsViewController: UIViewController {
         searchController.searchBar.rx.text
             .orEmpty
             .distinctUntilChanged()
-            .throttle(.seconds(3), scheduler: MainScheduler.instance)
+            .throttle(.seconds(1), scheduler: MainScheduler.instance)
             .bind(onNext: { [weak self] in
                 guard $0.count > 0 else {
                     self?.items = [.empty]
@@ -90,7 +103,6 @@ class MealsViewController: UIViewController {
                 }
                 self?.viewModel?.search(query: $0)
             }).disposed(by: disposeBag)
-        
         
         /// observable
         viewModel?.searchObservable
@@ -111,6 +123,13 @@ class MealsViewController: UIViewController {
 }
 
 extension MealsViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let item = dataSource.itemIdentifier(for: indexPath), let item = item.item else { return }
+        viewModel?.goToMeal(from: self, id: item.id)
+    }
+}
+
+extension MealsViewController {
     private func setupReusableCell(_ tableView: UITableView, _ indexPath: IndexPath, _ cellType: CellType) -> UITableViewCell {
         switch cellType {
         case .mock:

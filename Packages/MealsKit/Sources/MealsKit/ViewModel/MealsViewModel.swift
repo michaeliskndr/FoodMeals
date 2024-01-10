@@ -5,7 +5,7 @@
 //  Created by Michael Iskandar on 09/01/24.
 //
 
-import Foundation
+import UIKit
 import CommonKit
 import UtilityKit
 import RxSwift
@@ -17,15 +17,10 @@ public enum MealListState: Equatable {
     case empty
 }
 
-protocol MealsViewModelRespondObservable {
-    func search(query: String)
-    
-    var searchObservable: Observable<MealListState> { get }
-}
-
 class MealsViewModel: MealsViewModelRespondObservable {
     
     @Inject var mealService: MealService
+    @Inject var mealRouting: MealRouting
     
     @BehaviourWrapper
     var searchState: MealListState = .empty
@@ -53,5 +48,9 @@ extension MealsViewModel {
                     self.searchState = .error(error: error.localizedDescription)
                 }
             }.disposed(by: disposeBag)
+    }
+
+    func goToMeal(from viewController: UIViewController, id: String) {
+        mealRouting.routeToMealDetail(from: viewController, with: id)
     }
 }

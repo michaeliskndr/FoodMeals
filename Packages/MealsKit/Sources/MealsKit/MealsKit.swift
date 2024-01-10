@@ -11,6 +11,7 @@ import UtilityKit
 
 public struct MealsKit {
     public static func registerDependencies() {
-        InjectorManager.shared.register(MealFactory.self, factory: { _ in MealsKitFactory()})
+        InjectorManager.shared.register(MealFactory.self, factory: { _ in MealsKitFactory() })
+        InjectorManager.shared.register(MealRouting.self, factory: { _ in MealsRouter() })
     }
 }

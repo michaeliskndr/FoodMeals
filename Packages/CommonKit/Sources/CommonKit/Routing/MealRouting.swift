@@ -8,5 +8,5 @@
 import UIKit
 
 public protocol MealRouting {
-    func routeToMealDetail(from baseViewController: UIViewController)
+    func routeToMealDetail(from baseViewController: UIViewController, with id: String)
 }
