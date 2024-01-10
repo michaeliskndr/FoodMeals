@@ -1,0 +1,46 @@
+name: FoodMeals
+options:
+  deploymentTarget:
+    iOS: 13.0
+packages:
+  netfox:
+    url: "https://github.com/kasketis/netfox"
+    version: 1.21.0
+  UtilityKit:
+    path: Packages/UtilityKit
+  ConnectionKit:
+    path: Packages/ConnectionKit
+  MealsKit:
+    path: Packages/MealsKit
+  CommonKit:
+    path: Packages/CommonKit
+targets:
+  FoodMeals:
+    templates:
+      - FoodMealsTemplate
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: me.michaeliskndr.FoodMeals
+        PRODUCT_NAME: "FoodMeals"
+targetTemplates:
+  FoodMealsTemplate:
+    type: application
+    platform: iOS
+    sources:
+      - path: FoodMeals
+    dependencies:
+      # SPM
+      - package: netfox
+            # Local Package
+      - package: UtilityKit
+      - package: ConnectionKit
+      - package: CommonKit
+      - package: MealsKit
+    settings:
+      base:
+        ENABLE_TESTING_SEARCH_PATHS: YES
+        CURRENT_PROJECT_VERSION: 1
+        BUNDLE_VERSION: 1
+        MARKETING_VERSION: 1.0
+        INFOPLIST_FILE: FoodMeals/Resources/Info.plist
+
