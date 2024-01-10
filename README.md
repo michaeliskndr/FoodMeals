@@ -19,3 +19,4 @@ xcodegen
 - netfox
 - SnapKit
 - Alamofire
+- Swinject
