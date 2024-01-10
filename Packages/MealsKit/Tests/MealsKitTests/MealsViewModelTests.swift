@@ -10,7 +10,7 @@ import RxSwift
 import RxTest
 import ConnectionKit
 import CommonKit
-@testable import MealsKit // Replace with your app's module name
+@testable import MealsKit
 
 class MealsViewModelTests: XCTestCase {
     
@@ -159,7 +159,7 @@ private extension Meals {
 
 class MockMealService: MealService {
     var searchMealsStub: ((_ query: String) -> APIResponse<Meals>)?
-    var getMealsDetail: ((_ id: String) -> APIResponse<Meals>)?
+    var getMealDetailStub: ((_ id: String) -> APIResponse<Meal>)?
     
     func searchMeals(q: String) -> APIResponse<Meals> {
         if let searchMealsStub = searchMealsStub {
@@ -170,11 +170,11 @@ class MockMealService: MealService {
         }
     }
     
-    func getMealsDetail(id: String) -> APIResponse<Meals> {
-        if let searchMealsStub = searchMealsStub {
-            return getMealsDetail(id: id)
+    func getMealDetail(id: String) -> APIResponse<Meal> {
+        if let getMealDetailStub = getMealDetailStub {
+            return getMealDetailStub(id)
         } else {
-            let error = NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "No stub for searchMealsStub"])
+            let error = NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "No stub for getMealStub"])
             return Observable.just(.failure(error))
         }
     }
