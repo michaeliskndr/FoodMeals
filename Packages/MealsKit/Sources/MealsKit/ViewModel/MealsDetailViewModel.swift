@@ -45,6 +45,7 @@ extension MealsDetailViewModel {
                 guard let self = self else { return }
                 switch result {
                 case .success(let item):
+                    guard let item = item.meals?.first else { return }
                     self.mealDetailState = .meal(item: item)
                 case .failure(let error):
                     self.mealDetailState = .error(error: error.localizedDescription)

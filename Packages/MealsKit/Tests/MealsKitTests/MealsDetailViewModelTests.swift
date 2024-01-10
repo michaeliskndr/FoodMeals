@@ -44,8 +44,8 @@ class MealsDetailViewModelTests: XCTestCase {
     func testGetMealSuccess() {
         // Arrange
         let id = "123"
-        let meal = Meal.mock
-        let successResponse = Result<Meal, Error>.success(meal)
+        let meal = Meals.mock
+        let successResponse = Result<Meals, Error>.success(meal)
         
         let mockMealService = MockMealService()
         viewModel.mealService = mockMealService
@@ -65,9 +65,10 @@ class MealsDetailViewModelTests: XCTestCase {
         
         scheduler.start()
         
+        guard let assertMeal = meal.meals?.first else { return }
         // assert
         XCTAssertEqual(observer.events, [
-            .next(0, .meal(item: meal))
+            .next(0, .meal(item: assertMeal))
         ])
     }
     
@@ -75,7 +76,7 @@ class MealsDetailViewModelTests: XCTestCase {
         // arrange
         let id = "123"
         let errorMessage = "An error occurred"
-        let errorResponse = Result<Meal, Error>.failure(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: errorMessage]))
+        let errorResponse = Result<Meals, Error>.failure(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: errorMessage]))
 
         let mockMealService = MockMealService()
         viewModel.mealService = mockMealService
@@ -102,8 +103,10 @@ class MealsDetailViewModelTests: XCTestCase {
     }
 }
 
-private extension Meal {
-    static var mock: Meal {
-        Meal(id: "123", meal: "Ubi Bakar", thumbnail: "https://picsart", category: "Jajanan", tags: nil, area: "Indonesia")
+private extension Meals {
+    static var mock: Meals {
+        Meals(meals: [
+            Meal(id: "1", meal: "Udang", thumbnail: "Gambar", category: "Food", tags: nil, area: "Indonesia"),
+        ])
     }
 }

@@ -10,7 +10,7 @@ import CommonKit
 
 public protocol MealService {
     func searchMeals(q: String) -> APIResponse<Meals>
-    func getMealDetail(id: String) -> APIResponse<Meal>
+    func getMealDetail(id: String) -> APIResponse<Meals>
 }
 
 public class MealAPI: BaseAPI, MealService {
@@ -18,7 +18,7 @@ public class MealAPI: BaseAPI, MealService {
         request(.get, endpoint: "/search.php", payload: ["s": q])
     }
     
-    public func getMealDetail(id: String) -> APIResponse<Meal> {
+    public func getMealDetail(id: String) -> APIResponse<Meals> {
         request(.get, endpoint: "/lookup.php", payload: ["i": id])
     }
 }

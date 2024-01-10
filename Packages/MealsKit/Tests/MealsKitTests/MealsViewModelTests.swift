@@ -159,7 +159,7 @@ private extension Meals {
 
 class MockMealService: MealService {
     var searchMealsStub: ((_ query: String) -> APIResponse<Meals>)?
-    var getMealDetailStub: ((_ id: String) -> APIResponse<Meal>)?
+    var getMealDetailStub: ((_ id: String) -> APIResponse<Meals>)?
     
     func searchMeals(q: String) -> APIResponse<Meals> {
         if let searchMealsStub = searchMealsStub {
@@ -170,7 +170,7 @@ class MockMealService: MealService {
         }
     }
     
-    func getMealDetail(id: String) -> APIResponse<Meal> {
+    func getMealDetail(id: String) -> APIResponse<Meals> {
         if let getMealDetailStub = getMealDetailStub {
             return getMealDetailStub(id)
         } else {
