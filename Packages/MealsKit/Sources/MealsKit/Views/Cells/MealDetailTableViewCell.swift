@@ -16,35 +16,45 @@ final class MealDetailTableViewCell: UITableViewCell {
     
     lazy var mealImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
         return imageView
+    }()
+    
+    lazy var stackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.distribution = .fill
+        stackView.alignment = .leading
+        stackView.axis = .vertical
+        return stackView
     }()
     
     lazy var mealLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 16)
-        label.textColor = .gray
+        label.font = .systemFont(ofSize: 24, weight: .bold)
+        label.textColor = .darkGray
         return label
     }()
     
     lazy var areaLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 14)
-        label.textColor = .gray
+        label.textColor = .darkGray
         return label
     }()
     
-    lazy var categoryLabel: UILabel = {
+    lazy var instructionDescriptionLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 12)
-        label.textColor = .gray
+        label.font = .systemFont(ofSize: 16, weight: .bold)
+        label.textColor = .darkGray
         return label
     }()
 
-    lazy var tagLabel: UILabel = {
+    lazy var instructionLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 12)
-        label.textColor = .gray
+        label.numberOfLines = 0
+        label.textColor = .darkGray
         return label
     }()
 
@@ -61,40 +71,26 @@ final class MealDetailTableViewCell: UITableViewCell {
     
     func setupView() {
         contentView.addSubview(mealImageView)
-        contentView.addSubview(mealLabel)
-        contentView.addSubview(areaLabel)
-        contentView.addSubview(categoryLabel)
-        contentView.addSubview(tagLabel)
+        contentView.addSubview(stackView)
+        stackView.addArrangedSubview(mealLabel)
+        stackView.addArrangedSubview(areaLabel)
+        stackView.addArrangedSubview(instructionDescriptionLabel)
+        stackView.addArrangedSubview(instructionLabel)
+        
+        stackView.setCustomSpacing(16, after: areaLabel)
+        stackView.setCustomSpacing(8, after: instructionDescriptionLabel)
         
         mealImageView.snp.makeConstraints { make in
             make.top.equalToSuperview()
-            make.leading.equalToSuperview().offset(16)
-            make.bottom.equalToSuperview().offset(-16)
-            make.height.width.equalTo(100)
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(240)
         }
         
-        mealLabel.snp.makeConstraints { make in
-            make.top.equalTo(mealImageView)
-            make.leading.equalTo(mealImageView.snp.trailing).offset(8)
-            make.trailing.equalToSuperview().offset(-16)
-        }
-        
-        areaLabel.snp.makeConstraints { make in
-            make.top.equalTo(mealLabel.snp.bottom).offset(4)
-            make.leading.equalTo(mealImageView.snp.trailing).offset(8)
-            make.trailing.equalToSuperview().offset(-16)
-        }
-
-        categoryLabel.snp.makeConstraints { make in
-            make.top.equalTo(areaLabel.snp.bottom).offset(8)
-            make.leading.equalTo(mealImageView.snp.trailing).offset(8)
-            make.trailing.equalToSuperview().offset(-16)
-        }
-
-        tagLabel.snp.makeConstraints { make in
-            make.top.equalTo(categoryLabel.snp.bottom).offset(4)
-            make.leading.equalTo(mealImageView.snp.trailing).offset(8)
-            make.trailing.equalToSuperview().offset(-16)
+        stackView.snp.makeConstraints { make in
+            make.top.equalTo(mealImageView.snp.bottom).offset(8)
+            make.leading.equalToSuperview().offset(8)
+            make.trailing.equalToSuperview().offset(-8)
+            make.bottom.equalToSuperview()
         }
     }
     
@@ -103,9 +99,9 @@ final class MealDetailTableViewCell: UITableViewCell {
             mealImageView.kf.setImage(with: url)
         }
         mealLabel.text = meal.meal
-        areaLabel.text = "from: \(meal.area)"
-        categoryLabel.text = meal.category
-        tagLabel.text = meal.tags
+        areaLabel.text = "\(meal.area) Food - \(meal.category)"
+        instructionDescriptionLabel.text = "Instruction"
+        instructionLabel.text = meal.instructions
     }
     
     func applyMock() {
@@ -114,7 +110,6 @@ final class MealDetailTableViewCell: UITableViewCell {
         }
         mealLabel.text = "Rendang"
         areaLabel.text = "from: Indonesia"
-        categoryLabel.text = "main course"
-        tagLabel.text = "meat, rempah, juicy"
+        instructionDescriptionLabel.text = "main course"
     }
 }

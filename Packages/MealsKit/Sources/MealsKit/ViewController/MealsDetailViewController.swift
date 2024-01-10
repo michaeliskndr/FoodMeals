@@ -64,12 +64,12 @@ class MealsDetailViewController: UIViewController {
     }
     
     private func setupView() {
+        view.backgroundColor = .white
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.edges.equalTo(view.safeAreaLayoutGuide)
         }
-        
-        navigationItem.largeTitleDisplayMode = .always
+        navigationItem.largeTitleDisplayMode = .never
     }
     
     func setupRx() {
@@ -96,7 +96,7 @@ extension MealsDetailViewController: UITableViewDelegate {
         switch cellType {
         case .loading:
             let cell = UITableViewCell()
-            let spinner = UIActivityIndicatorView(style: .white)
+            let spinner = UIActivityIndicatorView(style: .gray)
             cell.addSubview(spinner)
             spinner.snp.makeConstraints { make in
                 make.centerX.centerY.equalToSuperview()

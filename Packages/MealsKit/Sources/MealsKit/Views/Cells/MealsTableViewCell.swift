@@ -24,29 +24,29 @@ final class MealsTableViewCell: UITableViewCell {
     
     lazy var mealLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 16)
-        label.textColor = .gray
+        label.font = .systemFont(ofSize: 16, weight: .semibold)
+        label.textColor = .darkGray
         return label
     }()
     
     lazy var areaLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 14)
-        label.textColor = .gray
+        label.font = .systemFont(ofSize: 14, weight: .regular)
+        label.textColor = .darkGray
         return label
     }()
     
     lazy var categoryLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 12)
-        label.textColor = .gray
+        label.font = .systemFont(ofSize: 12, weight: .light)
+        label.textColor = .darkGray
         return label
     }()
 
     lazy var tagLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 12)
-        label.textColor = .gray
+        label.font = .systemFont(ofSize: 12, weight: .light)
+        label.textColor = .darkGray
         return label
     }()
 
@@ -105,9 +105,9 @@ final class MealsTableViewCell: UITableViewCell {
             mealImageView.kf.setImage(with: url)
         }
         mealLabel.text = meal.meal
-        areaLabel.text = "from: \(meal.area)"
+        areaLabel.text = "\(meal.area) Food"
         categoryLabel.text = meal.category
-        tagLabel.text = meal.tags
+        tagLabel.text = meal.tags ?? "No Tags"
     }
     
     func applyMock() {
