@@ -16,6 +16,7 @@ import RxSwift
 protocol MealsViewModelRespondObservable {
     func search(query: String)
     func goToMeal(from viewController: UIViewController, id: String)
+    func presentImage(from viewController: UIViewController, image: UIImage)
     var searchObservable: Observable<MealListState> { get }
 }
 
@@ -29,6 +30,7 @@ class MealsViewController: UIViewController {
     
     enum CellType: Hashable {
         case empty
+        case initial
         case item(item: Meal)
         case mock
         
@@ -95,10 +97,10 @@ class MealsViewController: UIViewController {
         searchController.searchBar.rx.text
             .orEmpty
             .distinctUntilChanged()
-            .throttle(.seconds(1), scheduler: MainScheduler.instance)
+            .debounce(.seconds(1), scheduler: MainScheduler.instance)
             .bind(onNext: { [weak self] in
                 guard $0.count > 0 else {
-                    self?.items = [.empty]
+                    self?.items = [.initial]
                     return
                 }
                 self?.viewModel?.search(query: $0)
@@ -113,10 +115,12 @@ class MealsViewController: UIViewController {
                 case .meal(let items):
                     let tempItem = items.compactMap { CellType.item(item: $0) }
                     self.items = tempItem
+                case .initial:
+                    self.items = [.initial]
                 case .empty:
                     self.items = [.empty]
-                case .error(let error):
-                    self.items = [.empty]
+                case .error:
+                    self.showFailedAlert()
                 }
             }).disposed(by: disposeBag)
     }
@@ -126,6 +130,12 @@ extension MealsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let item = dataSource.itemIdentifier(for: indexPath), let item = item.item else { return }
         viewModel?.goToMeal(from: self, id: item.id)
+    }
+}
+
+extension MealsViewController: MealsTableViewCellDelegate {
+    func didTapImage(_ image: UIImage) {
+        viewModel?.presentImage(from: self, image: image)
     }
 }
 
@@ -141,10 +151,12 @@ extension MealsViewController {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: MealsTableViewCell.identifier, for: indexPath) as? MealsTableViewCell
             else { return UITableViewCell() }
             cell.apply(meal: item)
+            cell.delegate = self
             return cell
-        case .empty:
+        case .empty, . initial:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: InitialEmptyTableViewCell.identifier, for: indexPath) as? InitialEmptyTableViewCell
             else { return UITableViewCell() }
+            cell.apply(with: cellType)
             return cell
         }
     }

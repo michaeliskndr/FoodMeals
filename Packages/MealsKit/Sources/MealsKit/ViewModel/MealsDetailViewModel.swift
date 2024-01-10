@@ -5,7 +5,7 @@
 //  Created by Michael Iskandar on 10/01/24.
 //
 
-import Foundation
+import UIKit
 import CommonKit
 import UtilityKit
 import RxSwift
@@ -17,14 +17,9 @@ public enum MealDetailState: Equatable {
     case loading
 }
 
-protocol MealDetailRespondObservable {
-    func getMeal(id: String)
-    
-    var mealObservable: Observable<MealDetailState> { get }
-}
-
 class MealsDetailViewModel: MealDetailRespondObservable {
     
+    @Inject var mealRouting: MealRouting
     @Inject var mealService: MealService
     
     @BehaviourWrapper
@@ -38,7 +33,6 @@ class MealsDetailViewModel: MealDetailRespondObservable {
 }
 
 extension MealsDetailViewModel {
-    
     func getMeal(id: String) {
         mealService.getMealDetail(id: id)
             .subscribeOnNext { [weak self] result in
@@ -51,5 +45,9 @@ extension MealsDetailViewModel {
                     self.mealDetailState = .error(error: error.localizedDescription)
                 }
             }.disposed(by: disposeBag)
+    }
+    
+    func presentImage(from viewController: UIViewController, image: UIImage) {
+        mealRouting.presentImage(from: viewController, with: image)
     }
 }

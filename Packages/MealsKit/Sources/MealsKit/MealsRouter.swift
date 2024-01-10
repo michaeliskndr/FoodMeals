@@ -17,4 +17,10 @@ public struct MealsRouter: MealRouting {
         let vc = mealFactory.makeMealDetailViewController(id: id)
         baseViewController.navigationController?.pushViewController(vc, animated: true)
     }
+    
+    public func presentImage(from baseViewController: UIViewController, with image: UIImage) {
+        let vc = mealFactory.makeMealViewerController(image: image)
+        vc.modalPresentationStyle = .fullScreen
+        baseViewController.present(vc, animated: true)
+    }
 }

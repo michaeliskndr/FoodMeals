@@ -9,4 +9,5 @@ import UIKit
 
 public protocol MealRouting {
     func routeToMealDetail(from baseViewController: UIViewController, with id: String)
+    func presentImage(from baseViewController: UIViewController, with image: UIImage)
 }

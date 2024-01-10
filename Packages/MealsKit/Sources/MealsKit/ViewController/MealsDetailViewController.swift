@@ -13,6 +13,14 @@ import SnapKit
 import DiffableDataSources
 import RxSwift
 
+
+protocol MealDetailRespondObservable {
+    func getMeal(id: String)
+    func presentImage(from viewController: UIViewController, image: UIImage)
+
+    var mealObservable: Observable<MealDetailState> { get }
+}
+
 class MealsDetailViewController: UIViewController {
     
     var viewModel: MealDetailRespondObservable?
@@ -84,8 +92,8 @@ class MealsDetailViewController: UIViewController {
                     navigationItem.title = item.meal
                 case .loading:
                     self.items = [.loading]
-                case .error(let error):
-                    self.items = [.loading]
+                case .error:
+                    self.showFailedAlert()
                 }
             }).disposed(by: disposeBag)
     }
@@ -106,6 +114,7 @@ extension MealsDetailViewController: UITableViewDelegate {
         case .item(let item):
             guard let cell = tableView.dequeueReusableCell(withIdentifier: MealDetailTableViewCell.identifier, for: indexPath) as? MealDetailTableViewCell
             else { return UITableViewCell() }
+            cell.delegate = self
             cell.apply(meal: item)
             return cell
         }
@@ -116,5 +125,11 @@ extension MealsDetailViewController: UITableViewDelegate {
         snapshot.appendSections([.main])
         snapshot.appendItems(items, toSection: .main)
         dataSource.apply(snapshot)
+    }
+}
+
+extension MealsDetailViewController: MealsDetailTableViewCellDelegate {
+    func didTapImage(_ image: UIImage) {
+        viewModel?.presentImage(from: self, image: image)
     }
 }

@@ -25,9 +25,10 @@ public class MealsKitFactory: MealFactory {
         return viewController
     }
     
-    public func makeMealViewerController() -> UIViewController {
-        // TODO: Add Meal Viewer
-        return UIViewController()
+    public func makeMealViewerController(image: UIImage) -> UIViewController {
+        let viewController = MealViewerController()
+        viewController.image = image
+        return viewController
     }
 }
 

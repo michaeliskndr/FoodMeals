@@ -10,14 +10,21 @@ import CommonKit
 import Kingfisher
 import SnapKit
 
+protocol MealsDetailTableViewCellDelegate: AnyObject {
+    func didTapImage(_ image: UIImage)
+}
+
 final class MealDetailTableViewCell: UITableViewCell {
-    
+        
     static var identifier: String { String.init(describing: Self.self) }
+    
+    weak var delegate: MealsDetailTableViewCellDelegate?
     
     lazy var mealImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
+        imageView.isUserInteractionEnabled = true
         return imageView
     }()
     
@@ -92,6 +99,14 @@ final class MealDetailTableViewCell: UITableViewCell {
             make.trailing.equalToSuperview().offset(-8)
             make.bottom.equalToSuperview()
         }
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapImage))
+        mealImageView.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc func didTapImage(_ sender: UITapGestureRecognizer) {
+        guard let image = mealImageView.image else { return }
+        delegate?.didTapImage(image)
     }
     
     func apply(meal: Meal) {

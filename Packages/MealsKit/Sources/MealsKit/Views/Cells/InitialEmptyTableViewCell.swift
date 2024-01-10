@@ -16,21 +16,20 @@ final class InitialEmptyTableViewCell: UITableViewCell {
     lazy var illustrationImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
-        imageView.tintColor = .lightGray
+        imageView.tintColor = .darkGray
         return imageView
     }()
     
     lazy var descriptionLabel: UILabel = {
         let label = UILabel(frame: .zero)
         label.font = .systemFont(ofSize: 24, weight: .semibold)
-        label.textColor = .lightGray
+        label.textColor = .darkGray
         return label
     }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupView()
-        apply()
     }
     
     required init?(coder: NSCoder) {
@@ -53,10 +52,19 @@ final class InitialEmptyTableViewCell: UITableViewCell {
         }
     }
     
-    func apply() {
-        if #available(iOS 13.0, *) {
-            illustrationImageView.image = .init(systemName: "magnifyingglass.circle")
+    func apply(with type: MealsViewController.CellType) {
+        switch type {
+        case .empty:
+            if #available(iOS 13.0, *) {
+                illustrationImageView.image = .init(systemName: "multiply.circle.fill")
+            }
+            descriptionLabel.text = "Item not found"
+        case .initial:
+            if #available(iOS 13.0, *) {
+                illustrationImageView.image = .init(systemName: "magnifyingglass.circle")
+            }
+            descriptionLabel.text = "Find your favourite food"
+        default: break
         }
-        descriptionLabel.text = "Find your favourite food"
     }
 }

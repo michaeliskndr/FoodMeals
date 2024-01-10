@@ -15,6 +15,7 @@ public enum MealListState: Equatable {
     case error(error: String)
     case meal(items: [Meal])
     case empty
+    case initial
 }
 
 class MealsViewModel: MealsViewModelRespondObservable {
@@ -23,7 +24,7 @@ class MealsViewModel: MealsViewModelRespondObservable {
     @Inject var mealRouting: MealRouting
     
     @BehaviourWrapper
-    var searchState: MealListState = .empty
+    var searchState: MealListState = .initial
     var searchObservable: Observable<MealListState> {
         $searchState
     }
@@ -52,5 +53,9 @@ extension MealsViewModel {
 
     func goToMeal(from viewController: UIViewController, id: String) {
         mealRouting.routeToMealDetail(from: viewController, with: id)
+    }
+    
+    func presentImage(from viewController: UIViewController, image: UIImage) {
+        mealRouting.presentImage(from: viewController, with: image)
     }
 }

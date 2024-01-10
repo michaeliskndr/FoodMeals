@@ -10,5 +10,5 @@ import UIKit
 public protocol MealFactory {
     func makeMealViewController() -> UIViewController
     func makeMealDetailViewController(id: String) -> UIViewController
-    func makeMealViewerController() -> UIViewController
+    func makeMealViewerController(image: UIImage) -> UIViewController
 }
