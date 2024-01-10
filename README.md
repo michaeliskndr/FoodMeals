@@ -20,3 +20,4 @@ xcodegen
 - SnapKit
 - Alamofire
 - Swinject
+- Kingfisher
